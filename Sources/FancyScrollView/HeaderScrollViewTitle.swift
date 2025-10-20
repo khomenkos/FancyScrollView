@@ -3,6 +3,7 @@ import SwiftUI
 struct HeaderScrollViewTitle: View {
     let title: String
     let titleColor: Color
+    let font: Font
     let height: CGFloat
     let largeTitle: Double
 
@@ -11,11 +12,9 @@ struct HeaderScrollViewTitle: View {
         return ZStack {
             HStack {
                 Text(title)
-                    .font(.largeTitle)
+                    .font(font)
                     .foregroundColor(titleColor)
-                    .fontWeight(.black)
                     .padding(.horizontal, 16)
-
                 Spacer()
             }
             .padding(.bottom, 8)

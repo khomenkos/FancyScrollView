@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "FancyScrollView",
-    platforms: [.iOS(.v13)],
+    platforms: [.iOS("14.0")],
     products: [
         .library(
             name: "FancyScrollView",
