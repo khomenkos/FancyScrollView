@@ -30,36 +30,6 @@ struct HeaderScrollView: View {
                     }
                     .frame(width: globalGeometry.size.width, height: self.headerHeight)
 
-                    GeometryReader { geometry -> AnyView in
-                        let geometry = self.geometry(from: geometry, safeArea: globalGeometry.safeAreaInsets)
-                        return AnyView(
-                            ZStack {
-                                BlurView()
-                                    .opacity(1 - sqrt(geometry.largeTitleWeight))
-                                    .offset(y: geometry.blurOffset)
-
-                                VStack {
-                                    geometry.largeTitleWeight == 1 ? HStack {
-                                        BackButton(color: .white)
-                                        Spacer()
-                                    }.frame(width: geometry.width, height: navigationBarHeight) : nil
-
-                                    Spacer()
-
-                                    HeaderScrollViewTitle(title: self.title, titleColor: self.titleColor,
-                                                          height: navigationBarHeight,
-                                                          largeTitle: geometry.largeTitleWeight).layoutPriority(1000)
-                                }
-                                .padding(.top, globalGeometry.safeAreaInsets.top)
-                                .frame(width: geometry.width, height: max(geometry.elementsHeight, navigationBarHeight))
-                                .offset(y: geometry.elementsOffset)
-                            }
-                        )
-                    }
-                    .frame(width: globalGeometry.size.width, height: self.headerHeight)
-                    .zIndex(1000)
-                    .offset(y: -self.headerHeight)
-
                     self.content
                         .background(Color.background(colorScheme: self.colorScheme))
                         .offset(y: -self.headerHeight)
