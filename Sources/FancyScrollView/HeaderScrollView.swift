@@ -16,19 +16,52 @@ struct HeaderScrollView: View {
 
     var body: some View {
         GeometryReader { globalGeometry in
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 VStack(spacing: 0) {
                     GeometryReader { geometry -> AnyView in
                         let geometry = self.geometry(from: geometry, safeArea: globalGeometry.safeAreaInsets)
                         return AnyView(
                             self.header
-                                .frame(width: geometry.width, height: geometry.headerHeight)
+                                .frame(width: geometry.width,
+                                       height: geometry.headerHeight)
                                 .clipped()
                                 .opacity(sqrt(geometry.largeTitleWeight))
                                 .offset(y: geometry.headerOffset)
                         )
                     }
                     .frame(width: globalGeometry.size.width, height: self.headerHeight)
+
+                    GeometryReader { geometry -> AnyView in
+                        let geometry = self.geometry(from: geometry, safeArea: globalGeometry.safeAreaInsets)
+                        return AnyView(
+                            ZStack {
+                                Rectangle()
+                                    .fill(Color.clear)
+                                    .edgesIgnoringSafeArea(.all)
+
+                                VStack {
+                                    Spacer()
+
+                                    HeaderScrollViewTitle(
+                                        title: self.title,
+                                        titleColor: self.titleColor,
+                                        height: navigationBarHeight,
+                                        largeTitle: geometry.largeTitleWeight
+                                    )
+                                    .layoutPriority(1000)
+                                }
+                                .padding(.top, globalGeometry.safeAreaInsets.top)
+                                .frame(
+                                    width: geometry.width,
+                                    height: max(geometry.elementsHeight, navigationBarHeight)
+                                )
+                                .offset(y: geometry.elementsOffset)
+                            }
+                        )
+                    }
+                    .frame(width: globalGeometry.size.width, height: self.headerHeight)
+                    .zIndex(1000)
+                    .offset(y: -self.headerHeight)
 
                     self.content
                         .background(Color.background(colorScheme: self.colorScheme))
@@ -38,9 +71,6 @@ struct HeaderScrollView: View {
             }
             .edgesIgnoringSafeArea(.top)
         }
-        .navigationBarTitle(Text(""), displayMode: .inline)
-        .navigationBarHidden(true)
-        .hackNavigationToAllowSwipeBackWhenHidden()
     }
 }
 
