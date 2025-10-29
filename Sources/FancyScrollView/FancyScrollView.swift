@@ -9,7 +9,8 @@ public struct FancyScrollView: View {
     let scrollDownHeaderBehavior: ScrollDownHeaderBehavior
     let header: AnyView?
     let content: AnyView
-
+    let onHeaderTap: (() -> Void)?
+    
     public var body: some View {
         if let header = header {
             return AnyView(
@@ -20,8 +21,9 @@ public struct FancyScrollView: View {
                                  scrollUpBehavior: scrollUpHeaderBehavior,
                                  scrollDownBehavior: scrollDownHeaderBehavior,
                                  header: header,
-                                 content: content)
-            )
+                                 content: content,
+                                 onHeaderTap: onHeaderTap)
+                )
         } else {
             return AnyView(
                 AppleMusicStyleScrollView {
@@ -48,16 +50,15 @@ public struct FancyScrollView: View {
 }
 
 extension FancyScrollView {
-
     public init<A: View, B: View>(title: String = "",
-                                  titleColor: Color = Color.white,
+                                  titleColor: Color = .white,
                                   font: Font = .largeTitle,
                                   headerHeight: CGFloat = 300,
                                   scrollUpHeaderBehavior: ScrollUpHeaderBehavior = .parallax,
                                   scrollDownHeaderBehavior: ScrollDownHeaderBehavior = .offset,
+                                  onHeaderTap: (() -> Void)? = nil,
                                   header: () -> A?,
                                   content: () -> B) {
-
         self.init(title: title,
                   titleColor: titleColor,
                   font: font,
@@ -65,17 +66,18 @@ extension FancyScrollView {
                   scrollUpHeaderBehavior: scrollUpHeaderBehavior,
                   scrollDownHeaderBehavior: scrollDownHeaderBehavior,
                   header: AnyView(header()),
-                  content: AnyView(content()))
+                  content: AnyView(content()),
+                  onHeaderTap: onHeaderTap)
     }
 
     public init<A: View>(title: String = "",
-                         titleColor: Color = Color.white,
+                         titleColor: Color = .white,
                          font: Font = .largeTitle,
                          headerHeight: CGFloat = 300,
                          scrollUpHeaderBehavior: ScrollUpHeaderBehavior = .parallax,
                          scrollDownHeaderBehavior: ScrollDownHeaderBehavior = .offset,
+                         onHeaderTap: (() -> Void)? = nil, 
                          content: () -> A) {
-
         self.init(title: title,
                   titleColor: titleColor,
                   font: font,
@@ -83,6 +85,7 @@ extension FancyScrollView {
                   scrollUpHeaderBehavior: scrollUpHeaderBehavior,
                   scrollDownHeaderBehavior: scrollDownHeaderBehavior,
                   header: nil,
-                  content: AnyView(content()))
+                  content: AnyView(content()),
+                  onHeaderTap: onHeaderTap)
     }
 }

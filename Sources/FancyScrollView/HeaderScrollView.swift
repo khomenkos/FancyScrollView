@@ -21,6 +21,7 @@ struct HeaderScrollView: View {
     let scrollDownBehavior: ScrollDownHeaderBehavior
     let header: AnyView
     let content: AnyView
+    let onHeaderTap: (() -> Void)?
 
     @State private var currentLargeTitleWeight: Double = 1
 
@@ -59,6 +60,10 @@ struct HeaderScrollView: View {
                                 .background(
                                     Color.clear.preference(key: LargeTitleWeightPreferenceKey.self, value: geometry.largeTitleWeight)
                                 )
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    onHeaderTap?()
+                                }
                         )
                     }
                     .frame(width: globalGeometry.size.width, height: self.headerHeight)
@@ -97,7 +102,7 @@ struct HeaderScrollView: View {
                     .frame(width: globalGeometry.size.width, height: self.headerHeight)
                     .zIndex(1000)
                     .offset(y: -self.headerHeight)
-
+                    
                     self.content
                         .background(Color.background(colorScheme: self.colorScheme))
                         .offset(y: -self.headerHeight)
